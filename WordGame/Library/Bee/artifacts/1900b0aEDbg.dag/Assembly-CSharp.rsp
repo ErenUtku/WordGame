@@ -369,9 +369,12 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/LevelDataLoader.cs"
 "Assets/Scripts/Tile/TileObjectController.cs"
+"Assets/Scripts/Tile/TileSelector.cs"
 "Assets/Scripts/Tile/TilesMapController.cs"
 "Assets/Scripts/Tile/TileUIController.cs"
 "Assets/Scripts/Tile/WordTile.cs"
+"Assets/SlotController.cs"
+"Assets/WordSlot.cs"
 -langversion:9.0
 
 /deterministic

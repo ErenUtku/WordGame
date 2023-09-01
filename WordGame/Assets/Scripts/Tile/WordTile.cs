@@ -23,17 +23,12 @@ namespace Tile
         {
             //Set UI Text And GameObject Name
             _tileUIController.SetTileText(tileCharacter);
-            
+
             //test
             var childrenExist = _tileObjectController.ChildrenExist();
 
             _tileObjectController.BlockerActivation(childrenExist);
-            
-        }
 
-        private void OnMouseDown()
-        {
-            Debug.Log("Clicked" + gameObject.name);
         }
 
         public void SetUpTileFromData(TileData newTileData)
