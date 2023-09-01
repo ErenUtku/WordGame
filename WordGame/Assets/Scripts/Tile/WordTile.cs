@@ -1,3 +1,4 @@
+using Data;
 using UnityEngine;
 
 namespace Tile
@@ -12,6 +13,8 @@ namespace Tile
 
         private TileUIController _tileUIController;
         private TileObjectController _tileObjectController;
+
+        private Transform _previousParent;
 
         private void Awake()
         {
@@ -29,6 +32,8 @@ namespace Tile
 
             _tileObjectController.BlockerActivation(childrenExist);
 
+            _previousParent = this.gameObject.transform.parent;
+
         }
 
         public void SetUpTileFromData(TileData newTileData)
@@ -38,7 +43,12 @@ namespace Tile
             tileCharacter = tileData.character;
             _tileObjectController.SetPosition(tileData.position.x,tileData.position.y,tileData.position.z);
             _tileObjectController.SetChildrenList(tileData.children);
+        }
 
+        public void ReturnPreviousPosition()
+        {
+            this.gameObject.transform.localPosition = new Vector3(tileData.position.x,tileData.position.y,tileData.position.z);
+            //transform.SetParent(_previousParent);
         }
     }
 }

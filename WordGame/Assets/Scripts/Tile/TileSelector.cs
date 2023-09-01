@@ -1,3 +1,4 @@
+using Slot;
 using UnityEngine;
 
 namespace Tile

@@ -1,15 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class TileUIController : MonoBehaviour
+namespace Tile
 {
-    [SerializeField] private TextMeshPro textUI;
-
-    public void SetTileText(string character)
+    public class TileUIController : MonoBehaviour
     {
-        this.gameObject.name = character;
-        textUI.text = character;
+        [SerializeField] private TextMeshPro textUI;
+
+        public void SetTileText(string character)
+        {
+            this.gameObject.name = character;
+            textUI.text = character;
+        }
     }
 }
