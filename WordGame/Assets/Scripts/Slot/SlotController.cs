@@ -10,12 +10,12 @@ namespace Slot
     {
         [SerializeField] private Transform usedParent;
         public List<Transform> _slotsTransform;
-        
-        private Dictionary<string, bool> _dictionary;
 
         public List<WordTile> wordTiles;
 
         public bool validWordFound;
+
+        private DataManager _dataManager;
 
         private void Awake()
         {
@@ -31,9 +31,8 @@ namespace Slot
         {
             wordTiles = new List<WordTile>();
             _slotsTransform = new List<Transform>();
-            
-            // Load the dictionary from the "dictionary.txt" file.
-            LoadDictionary();
+
+            _dataManager = DataManager.Instance;
         
             foreach (Transform child in this.gameObject.transform)
             {
@@ -79,30 +78,16 @@ namespace Slot
             Debug.Log("Finish");
         }
         
-        private void LoadDictionary()
-        {
-            TextAsset dictionaryFile = Resources.Load<TextAsset>("dictionary/dictionary");
-            
-            if (dictionaryFile != null)
-            {
-                string[] words = dictionaryFile.text.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-                _dictionary = words.ToDictionary(word => word.ToLower(), _ => true);
-            }
-            else
-            {
-                Debug.LogError("Dictionary file not found!");
-                _dictionary = new Dictionary<string, bool>();
-            }
-        }
         
         public void CheckWordInDictionary()
         {
             string formedWord = string.Join("", wordTiles.Select(tile => tile.tileCharacter));
             formedWord = formedWord.ToLower(); 
 
-            if (formedWord.Length >= 2 && _dictionary.ContainsKey(formedWord))
+            if (formedWord.Length >= 2 && _dataManager.Dictionary.ContainsKey(formedWord))
             {
-                _dictionary[formedWord] = true;
+                _dataManager.Dictionary[formedWord] = true;
+                
                 validWordFound = true;
 
                 AcceptButton.instance.ButtonActivation(true);

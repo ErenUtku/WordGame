@@ -1,4 +1,3 @@
-using Data;
 using UnityEngine;
 
 namespace Tile
@@ -7,16 +6,10 @@ namespace Tile
     {
         [SerializeField] private WordTile wordTilePrefab;
         [SerializeField] private Transform tilesParent;
-        [SerializeField] private string levelFileName = "level_1";
-        
-        
+
         private void Awake()
         {
-            var levelJson = Resources.Load<TextAsset>("levels/" + levelFileName);
-            
-            if (levelJson == null) return;
-            
-            LevelData levelData = JsonUtility.FromJson<LevelData>(levelJson.text);
+            var levelData = DataManager.Instance.GetLevelData();
                 
             if (levelData is {tiles: not null})
             {
