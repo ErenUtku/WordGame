@@ -16,8 +16,15 @@ public class SwipeMenu : MonoBehaviour
         {
             _pos[i] = distance * i;
         }
+
+        float initialValue = (DataManager.Instance.LevelIndex - 1) / (float)4;//4 is test
+        
+        //(float)(DataManager.Instance.GetLevelsCount())
+        scrollbar.GetComponent<Scrollbar>().value = initialValue;
+        _scrollPos = initialValue;
     }
 
+    
     void Update()
     {
         
@@ -41,7 +48,6 @@ public class SwipeMenu : MonoBehaviour
         {
             if (_scrollPos < _pos[i] + (distance / 2) && _scrollPos > _pos[i] - (distance / 2))
             {
-                Debug.LogWarning("Current Selected Level" + i);
                 transform.GetChild(i).localScale = Vector2.Lerp(transform.GetChild(i).localScale, new Vector2(1.2f, 1.2f), 0.1f);
                 for (int j = 0; j < _pos.Length; j++)
                 {
@@ -52,6 +58,8 @@ public class SwipeMenu : MonoBehaviour
                 }
             }
         }
+       
 
     }
+    
 }

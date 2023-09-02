@@ -1644,7 +1644,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -503.90347, y: 473}
+  m_AnchoredPosition: {x: -503.9035, y: 473}
   m_SizeDelta: {x: 0, y: 1083}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &9218603706348738097
@@ -2032,7 +2032,7 @@ GameObject:
   - component: {fileID: 9218603707191982868}
   - component: {fileID: 9218603707191982869}
   m_Layer: 5
-  m_Name: Scroll View
+  m_Name: LevelSelection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

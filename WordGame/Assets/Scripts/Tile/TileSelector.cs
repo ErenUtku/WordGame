@@ -9,10 +9,12 @@ namespace Tile
 
         [SerializeField] private Transform usedTileParent;
         [SerializeField] private SlotController slotController;
+        [SerializeField] private bool stopTileClicking;
 
         public static Action TileMoved;
-        public static TileSelector Instance;
         public static Action CheckWord;
+        
+        public static TileSelector Instance;
         private void Awake()
         {
             Instance = this;
@@ -20,7 +22,8 @@ namespace Tile
 
         void Update()
         {
-        
+            if (stopTileClicking) return;
+            
             if (Input.GetMouseButtonDown(0))
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
