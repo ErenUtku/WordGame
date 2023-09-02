@@ -7,9 +7,9 @@ namespace Tile
     {
         [SerializeField] private TextMeshPro textUI;
 
-        public void SetTileText(string character)
+        public void SetTileText(string character, int tileId)
         {
-            this.gameObject.name = character;
+            this.gameObject.name = tileId.ToString();
             textUI.text = character;
         }
     }
