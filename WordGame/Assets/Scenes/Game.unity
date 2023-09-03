@@ -1365,10 +1365,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97b1fbb7ada1e0b43a0cb59933b586a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelCompletePanel: {fileID: 0}
-  nextButton: {fileID: 0}
-  levelCompletePanelShowDelayTime: 0
-  levelFailPanelShowDelayTime: 0
+  levelCompletePanel: {fileID: 711281350}
+  nextButton: {fileID: 1154882280}
 --- !u!4 &685972626
 Transform:
   m_ObjectHideFlags: 0

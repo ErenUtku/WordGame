@@ -375,6 +375,7 @@
 "Assets/Scripts/PlayerDataState.cs"
 "Assets/Scripts/SaveManager.cs"
 "Assets/Scripts/SceneLoader.cs"
+"Assets/Scripts/ScoringSystem.cs"
 "Assets/Scripts/Slot/SlotController.cs"
 "Assets/Scripts/Slot/WordSlot.cs"
 "Assets/Scripts/Tile/TileObjectController.cs"

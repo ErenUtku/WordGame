@@ -8,11 +8,10 @@ using Utils;
 
 public class DataManager : MonoSingletonPersistent<DataManager>
 {
-    public Dictionary<string, bool> Dictionary { get; } = new Dictionary<string, bool>();
-    
+    public Dictionary<string, bool> Dictionary { get; } = new Dictionary<string, bool>(); 
     private PlayerDataState _playerDataState;
-    
-    private LevelData[] _levels; // Store levels as an array
+    private LevelData[] _levels;
+    private Dictionary<int, int> highScores = new Dictionary<int, int>();
     
     private LevelData _currentLevelData;
     private int _currentLevelIndex;
@@ -33,6 +32,9 @@ public class DataManager : MonoSingletonPersistent<DataManager>
 
         //Player
         LoadPlayerData();
+        
+        //HighScores
+        LoadHighScores();
         
         //First Time App Launching
         Application.targetFrameRate = 60;
@@ -140,5 +142,62 @@ public class DataManager : MonoSingletonPersistent<DataManager>
     
     
     
+    #endregion
+
+    #region HighScores
+
+    
+    // Save high scores to player preferences or a file
+    private void SaveHighScores()
+    {
+        foreach (var kvp in highScores)
+        {
+            PlayerPrefs.SetInt("HighScoreLevel" + kvp.Key, kvp.Value);
+        }
+        PlayerPrefs.Save();
+    }
+
+    // Load high scores from player preferences or a file
+    private void LoadHighScores()
+    {
+        highScores.Clear();
+
+        foreach (var kvp in highScores)
+        {
+            int score = PlayerPrefs.GetInt("HighScoreLevel" + kvp.Key);
+            highScores[kvp.Key] = score;
+        }
+    }
+
+    // Set the high score for a specific level
+    public void SetHighScore(int level, int score)
+    {
+        if (highScores.ContainsKey(level))
+        {
+            // Check if the new score is higher than the existing high score
+            if (score > highScores[level])
+            {
+                highScores[level] = score;
+                SaveHighScores(); // Save the updated high score
+            }
+        }
+        else
+        {
+            highScores[level] = score;
+            SaveHighScores(); // Save the new high score
+        }
+    }
+
+    // Get the high score for a specific level
+    public int GetHighScore(int level)
+    {
+        if (highScores.ContainsKey(level))
+        {
+            return highScores[level];
+        }
+        return 0; // No high score found for this level
+    }
+    
+
     #endregion
 }

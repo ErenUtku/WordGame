@@ -7,10 +7,6 @@ public class UIController : MonoBehaviour
     [Header("Panels")] 
     [SerializeField] private GameObject levelCompletePanel;
     [SerializeField] private GameObject nextButton;
-    [Space]
-    [Header("Settings Value")]
-    [SerializeField] private float levelCompletePanelShowDelayTime;
-    [SerializeField] private float levelFailPanelShowDelayTime;
     
     private void ShowLevelCompletePanel()
     {

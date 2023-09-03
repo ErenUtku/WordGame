@@ -16,7 +16,12 @@ namespace Slot
         public bool validWordFound;
 
         private DataManager _dataManager;
+        
+        private ScoringSystem scoringSystem;
+        
+        private List<string> claimedWords = new List<string>();
 
+        private string formedWord;
         private void Awake()
         {
             TileSelector.CheckWord += CheckWordInDictionary;
@@ -31,6 +36,8 @@ namespace Slot
         {
             wordTiles = new List<WordTile>();
             _slotsTransform = new List<Transform>();
+
+            scoringSystem = new ScoringSystem();
 
             _dataManager = DataManager.Instance;
         
@@ -81,7 +88,7 @@ namespace Slot
         
         public void CheckWordInDictionary()
         {
-            string formedWord = string.Join("", wordTiles.Select(tile => tile.tileCharacter));
+            formedWord = string.Join("", wordTiles.Select(tile => tile.tileCharacter));
             formedWord = formedWord.ToLower(); 
 
             if (formedWord.Length >= 2 && _dataManager.Dictionary.ContainsKey(formedWord))
@@ -111,8 +118,9 @@ namespace Slot
                 Destroy(child.gameObject);
             }
             
+            claimedWords.Add(formedWord);
+
             AcceptButton.instance.ButtonActivation(false);
         }
-        
     }
 }
