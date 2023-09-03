@@ -3386,7 +3386,7 @@ GameObject:
   - component: {fileID: 1670552752}
   - component: {fileID: 1670552753}
   m_Layer: 0
-  m_Name: SlotCointroller
+  m_Name: SlotController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3426,6 +3426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1444a1a0a7a8721449e1cb57e0ac756c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unusedParent: {fileID: 69780638}
   usedParent: {fileID: 731271558}
   _slotsTransform: []
   wordTiles: []

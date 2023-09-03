@@ -76,7 +76,6 @@ namespace Tile
                 {
                     if (childId.ToString() == child.name)
                     {
-                        Debug.Log("Still contains");
                         _tileObjectController.BlockerActivation(true);
                         tileBlocked = true;
                         return;
@@ -84,7 +83,6 @@ namespace Tile
                 }
             }
             
-            Debug.Log("Not contain");
             tileBlocked = false;
             _tileObjectController.BlockerActivation(false);
         }

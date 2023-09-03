@@ -1,0 +1,10 @@
+{
+  "title": "TEST LEVEL",
+  "tiles": [
+    { "id": 0, "position": { "x": 10, "y": -10, "z": 99.83999633789063 }, "character": "A", "children": [] },
+    { "id": 1, "position": { "x": 20, "y": -10, "z": 99.83999633789063 }, "character": "B", "children": [0] },
+    { "id": 2, "position": { "x": 10, "y": -20, "z": 99.76000213623047 }, "character": "L", "children": [1] },
+    { "id": 3, "position": { "x": 20, "y": -20, "z": 99.76000213623047 }, "character": "E", "children": [1] },
+    { "id": 4, "position": { "x": 20, "y": -30, "z": 99.76000213623047 }, "character": "H", "children": [1] }
+  ]
+}

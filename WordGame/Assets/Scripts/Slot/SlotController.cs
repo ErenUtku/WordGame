@@ -1,13 +1,15 @@
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Tile;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Slot
 {
     public class SlotController : MonoBehaviour
     {
+        [SerializeField] private Transform unusedParent;
         [SerializeField] private Transform usedParent;
         public List<Transform> _slotsTransform;
 
@@ -45,6 +47,9 @@ namespace Slot
             {
                 _slotsTransform.Add(child);
             }
+            
+            //test
+            CheckRemainingWord();
         }
 
         public void TakeLetter(WordTile wordTile)
@@ -62,6 +67,8 @@ namespace Slot
                 
                 break;
             }
+
+            CheckRemainingWord();
         }
 
         public void UndoLetter()
@@ -78,8 +85,6 @@ namespace Slot
             
             wordTiles.RemoveAt(lastItemIndex);
             
-            
-
             TileSelector.Instance.TriggerTileMovementAction();
             
             Debug.Log("Finish");
@@ -117,10 +122,50 @@ namespace Slot
             {
                 Destroy(child.gameObject);
             }
+
+            foreach (var slot in _slotsTransform)
+            {
+                var wordSlot = slot.GetComponent<WordSlot>();
+                wordSlot.FillTheSlot(false);
+            }
+
+            wordTiles.Clear();
             
             claimedWords.Add(formedWord);
 
             AcceptButton.instance.ButtonActivation(false);
+            
+            
+        }
+
+        private void CheckRemainingWord()
+        {
+            // Get the list of unused tiles from unusedParent.
+            List<Data.TileData> allTiles = new List<Data.TileData>();
+            foreach (Transform child in unusedParent)
+            {
+                WordTile wordTile = child.GetComponent<WordTile>();
+                if (wordTile != null)
+                {
+                    allTiles.Add(wordTile.tileData);
+                }
+            }
+
+            foreach (Transform child in usedParent)
+            {
+                WordTile wordTile = child.GetComponent<WordTile>();
+                if (wordTile != null)
+                {
+                    allTiles.Add(wordTile.tileData);
+                }
+            }
+            
+            allTiles.OrderBy(tile => tile.children.Count).ToList();
+
+            RemainingTiles remainingTiles = new RemainingTiles(DataManager.Instance.GetLevelData(),allTiles, DataManager.Instance.Dictionary);
+            var validWords = remainingTiles.FindWords();
+            Debug.Log(validWords);
+
         }
     }
 }
