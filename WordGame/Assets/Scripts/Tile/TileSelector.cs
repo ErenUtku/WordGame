@@ -1,4 +1,6 @@
 using System;
+using Controllers;
+using Data;
 using Slot;
 using UnityEngine;
 
@@ -6,23 +8,27 @@ namespace Tile
 {
     public class TileSelector : MonoBehaviour
     {
+        private bool _stopTileClicking;
 
-        [SerializeField] private Transform usedTileParent;
-        [SerializeField] private SlotController slotController;
-        [SerializeField] private bool stopTileClicking;
-
-        public static Action TileMoved;
+        public static Action<TileController> TileMoved;
         public static Action CheckWord;
         
         public static TileSelector Instance;
         private void Awake()
         {
             Instance = this;
+
+            LevelManager.OnLevelComplete += StopTileClicking;
+        }
+
+        private void OnDestroy()
+        {
+            LevelManager.OnLevelComplete -= StopTileClicking;
         }
 
         void Update()
         {
-            if (stopTileClicking) return;
+            if (_stopTileClicking) return;
             
             if (Input.GetMouseButtonDown(0))
             {
@@ -31,31 +37,32 @@ namespace Tile
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    WordTile tile = hit.collider.GetComponent<WordTile>();
+                    TileController tileController = hit.collider.GetComponent<TileController>();
 
-                    if (tile.IsTileBlocked() || tile.IsTileInSlot()) return;
+                    if (tileController.TileBlocked || tileController.TileInSlot) return;
 
-                    if (tile != null)
+                    if (tileController != null)
                     {
-                        string tileName = tile.tileCharacter;
+                        SlotController.instance.TakeLetter(tileController);
 
-                        slotController.TakeLetter(tile);
-
-                        TriggerTileMovementAction();
+                        TriggerTileMovementAction(tileController);
                         
-                        tile.TileSlotUsage(true);
+                        tileController.TileInSlot = true;
                         
                         CheckWord?.Invoke();
-                        
-                        Debug.Log("Clicked Tile Name: " + tileName);
                     }
                 }
             }
         }
 
-        public void TriggerTileMovementAction()
+        public void TriggerTileMovementAction(TileController tileController)
         {
-            TileMoved?.Invoke();
+            TileMoved?.Invoke(tileController);
+        }
+
+        private void StopTileClicking(LevelData levelData)
+        {
+            _stopTileClicking = true;
         }
 
        

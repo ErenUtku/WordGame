@@ -17,7 +17,6 @@ public class UIController : MonoBehaviour
 
     public void ShowLevelCompletePanel()
     {
-
         nextButton.SetActive(false); //Delay Button Activation
 
         levelCompletePanel.SetActive(true);

@@ -4,6 +4,7 @@ using System.Linq;
 using Data;
 using Tile;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 
 namespace Slot
@@ -14,7 +15,7 @@ namespace Slot
         [SerializeField] private Transform usedParent;
         public List<Transform> _slotsTransform;
 
-        public List<WordTile> wordTiles;
+        public List<TileController> allTileControllers;
 
         public bool validWordFound;
 
@@ -25,9 +26,13 @@ namespace Slot
         private List<string> claimedWords = new List<string>();
 
         private string formedWord;
+
+        public static SlotController instance;
         private void Awake()
         {
+            instance = this;
             TileSelector.CheckWord += CheckWordInDictionary;
+            
         }
 
         private void OnDestroy()
@@ -37,7 +42,7 @@ namespace Slot
 
         private void Start()
         {
-            wordTiles = new List<WordTile>();
+            allTileControllers = new List<TileController>();
             _slotsTransform = new List<Transform>();
 
             scoringSystem = new ScoringSystem();
@@ -53,7 +58,7 @@ namespace Slot
             CheckRemainingWord();
         }
 
-        public void TakeLetter(WordTile wordTile)
+        public void TakeLetter(TileController tileController)
         {
             foreach (var slot in _slotsTransform)
             {
@@ -62,9 +67,9 @@ namespace Slot
                 if(wordSlot.IsFull()) continue;
             
                 wordSlot.FillTheSlot(true);
-                wordTiles.Add(wordTile);
-                wordTile.transform.SetParent(usedParent);
-                wordTile.transform.position = slot.transform.position;
+                allTileControllers.Add(tileController);
+                tileController.transform.SetParent(usedParent);
+                tileController.transform.position = slot.transform.position;
                 
                 break;
             }
@@ -74,27 +79,26 @@ namespace Slot
 
         public void UndoLetter()
         {
-            if (wordTiles.Count <= 0) return;
+            if (allTileControllers.Count <= 0) return;
             
-            int lastItemIndex = wordTiles.Count - 1;
+            int lastItemIndex = allTileControllers.Count - 1;
             
-            wordTiles.Last().ReturnPreviousPosition();
+            allTileControllers.Last().TileObjectController.ReturnPreviousPosition();
 
-            wordTiles.Last().TileSlotUsage(false);
+            allTileControllers.Last().TileInSlot = false;
             
             _slotsTransform[lastItemIndex].GetComponent<WordSlot>().FillTheSlot(false);
             
-            wordTiles.RemoveAt(lastItemIndex);
+            TileSelector.Instance.TriggerTileMovementAction(allTileControllers.Last());
             
-            TileSelector.Instance.TriggerTileMovementAction();
+            allTileControllers.RemoveAt(lastItemIndex);
             
-            Debug.Log("Finish");
         }
         
         
         public void CheckWordInDictionary()
         {
-            formedWord = string.Join("", wordTiles.Select(tile => tile.tileCharacter));
+            formedWord = string.Join("", allTileControllers.Select(tile => tile.TileData.character));
             formedWord = formedWord.ToLower(); 
 
             if (formedWord.Length >= 2 && _dataManager.Dictionary.ContainsKey(formedWord))
@@ -130,7 +134,7 @@ namespace Slot
                 wordSlot.FillTheSlot(false);
             }
 
-            wordTiles.Clear();
+            allTileControllers.Clear();
             
             claimedWords.Add(formedWord);
 
@@ -145,19 +149,19 @@ namespace Slot
             List<Data.TileData> allTiles = new List<Data.TileData>();
             foreach (Transform child in unusedParent)
             {
-                WordTile wordTile = child.GetComponent<WordTile>();
-                if (wordTile != null)
+                TileController tileController = child.GetComponent<TileController>();
+                if (tileController != null)
                 {
-                    allTiles.Add(wordTile.tileData);
+                    allTiles.Add(tileController.TileData);
                 }
             }
 
             foreach (Transform child in usedParent)
             {
-                WordTile wordTile = child.GetComponent<WordTile>();
-                if (wordTile != null)
+                TileController tileController = child.GetComponent<TileController>();
+                if (tileController != null)
                 {
-                    allTiles.Add(wordTile.tileData);
+                    allTiles.Add(tileController.TileData);
                 }
             }
             
@@ -165,14 +169,13 @@ namespace Slot
 
             RemainingTiles remainingTiles = new RemainingTiles(DataManager.Instance.GetLevelData(),allTiles, DataManager.Instance.Dictionary);
             var validWords = remainingTiles.FindWords();
-            Debug.Log(validWords);
 
             
             if (validWords.Count <= 0)
             {
                 var totalScore = scoringSystem.CalculateTotalScore(claimedWords,unusedParent.transform.childCount);
 
-                _dataManager.SetHighScore(DataManager.Instance.GetLevelIndex(), totalScore);
+                _dataManager.HighScoreManager.SetHighScore(DataManager.Instance.GetLevelIndex(), totalScore);
                 
                 DataManager.Instance.SetLevel(DataManager.Instance.GetLevelIndex()+1);
 

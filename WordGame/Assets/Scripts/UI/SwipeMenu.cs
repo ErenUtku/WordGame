@@ -1,65 +1,72 @@
-using System;
+using Data;
 using UnityEngine;
 using UnityEngine.UI;
-public class SwipeMenu : MonoBehaviour
+
+namespace UI
 {
-    public GameObject scrollbar;
-    private float _scrollPos = 0;
-    private float[] _pos;
-    private float distance;
-
-    private void Start()
+    public class SwipeMenu : MonoBehaviour
     {
-        _pos = new float[transform.childCount];
-        distance = 1f / (_pos.Length - 1f);
-        for (int i = 0; i < _pos.Length; i++)
-        {
-            _pos[i] = distance * i;
-        }
-
-        float initialValue = (DataManager.Instance.LevelIndex - 1) / (float)4;//4 is test
-        
-        //(float)(DataManager.Instance.GetLevelsCount())
-        scrollbar.GetComponent<Scrollbar>().value = initialValue;
-        _scrollPos = initialValue;
-    }
-
+        [SerializeField] private GameObject scrollbar;
     
-    void Update()
-    {
-        
-        if (Input.GetMouseButton(0))
+        //Container Values
+        private float _scrollPos = 0;
+        private float[] _pos;
+        private float _distance;
+
+        private void Start()
         {
-            _scrollPos = scrollbar.GetComponent<Scrollbar>().value;
-        }
-        else
-        {
+            _pos = new float[transform.childCount];
+            _distance = 1f / (_pos.Length - 1f);
             for (int i = 0; i < _pos.Length; i++)
             {
-                if (_scrollPos < _pos[i] + (distance / 2) && _scrollPos > _pos[i] - (distance / 2))
-                {
-                    scrollbar.GetComponent<Scrollbar>().value = Mathf.Lerp(scrollbar.GetComponent<Scrollbar>().value, _pos[i], 0.1f);
-                }
+                _pos[i] = _distance * i;
             }
+
+            var initialValue = CalculatePlayerLevelIndexPoint();
+        
+            scrollbar.GetComponent<Scrollbar>().value = initialValue;
+            _scrollPos = initialValue;
         }
 
 
-        for (int i = 0; i < _pos.Length; i++)
+        private void Update()
         {
-            if (_scrollPos < _pos[i] + (distance / 2) && _scrollPos > _pos[i] - (distance / 2))
+        
+            if (Input.GetMouseButton(0))
             {
-                transform.GetChild(i).localScale = Vector2.Lerp(transform.GetChild(i).localScale, new Vector2(1.2f, 1.2f), 0.1f);
-                for (int j = 0; j < _pos.Length; j++)
+                _scrollPos = scrollbar.GetComponent<Scrollbar>().value;
+            }
+            else
+            {
+                for (int i = 0; i < _pos.Length; i++)
                 {
-                    if (j != i)
+                    if (_scrollPos < _pos[i] + (_distance / 2) && _scrollPos > _pos[i] - (_distance / 2))
                     {
-                        transform.GetChild(j).localScale = Vector2.Lerp(transform.GetChild(j).localScale, new Vector2(0.8f, 0.8f), 0.1f);
+                        scrollbar.GetComponent<Scrollbar>().value = Mathf.Lerp(scrollbar.GetComponent<Scrollbar>().value, _pos[i], 0.1f);
+                    }
+                }
+            }
+
+
+            for (int i = 0; i < _pos.Length; i++)
+            {
+                if (_scrollPos < _pos[i] + (_distance / 2) && _scrollPos > _pos[i] - (_distance / 2))
+                {
+                    transform.GetChild(i).localScale = Vector2.Lerp(transform.GetChild(i).localScale, new Vector2(1.2f, 1.2f), 0.1f);
+                    for (int j = 0; j < _pos.Length; j++)
+                    {
+                        if (j != i)
+                        {
+                            transform.GetChild(j).localScale = Vector2.Lerp(transform.GetChild(j).localScale, new Vector2(0.8f, 0.8f), 0.1f);
+                        }
                     }
                 }
             }
         }
-       
 
+        private static float CalculatePlayerLevelIndexPoint()
+        {
+            return (DataManager.Instance.LevelIndex - 1) / (float)DataManager.Instance.GetLevelsCount();
+        }
     }
-    
 }

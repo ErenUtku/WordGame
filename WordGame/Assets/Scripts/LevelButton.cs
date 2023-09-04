@@ -1,4 +1,6 @@
 using System;
+using Controllers;
+using Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +25,7 @@ public class LevelButton : MonoBehaviour
 
     private void Start()
     {
-        var totalScore = DataManager.Instance.GetHighScore(levelIndex);
+        var totalScore = DataManager.Instance.HighScoreManager.GetHighScore(levelIndex);
 
         if (totalScore <= 0) return;
         

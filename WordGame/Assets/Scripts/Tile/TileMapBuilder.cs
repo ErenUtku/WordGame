@@ -1,10 +1,12 @@
+using Data;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Tile
 {
-    public class TilesMapController : MonoBehaviour
+    public class TileMapBuilder : MonoBehaviour
     {
-        [SerializeField] private WordTile wordTilePrefab;
+        [FormerlySerializedAs("wordTilePrefab")] [SerializeField] private TileController tileControllerPrefab;
         [SerializeField] private Transform tilesParent;
 
         private void Awake()
@@ -15,8 +17,8 @@ namespace Tile
             {
                 foreach (var tileData in levelData.tiles)
                 {
-                    WordTile newTile = Instantiate(wordTilePrefab, tilesParent);
-                    newTile.SetUpTileFromData(tileData);
+                    TileController newTileController = Instantiate(tileControllerPrefab, tilesParent);
+                    newTileController.Initialize(tileData);
                 }
             }
         }

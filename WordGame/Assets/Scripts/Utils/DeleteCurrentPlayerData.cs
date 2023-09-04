@@ -1,7 +1,8 @@
 using System.IO;
+using Controllers.Data;
 using UnityEngine;
 
-namespace Controllers.Data
+namespace Utils
 {
     public class DeleteCurrentPlayerData : MonoBehaviour
     {
