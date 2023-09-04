@@ -367,6 +367,7 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.ref.dll"
+"Assets/ScoreController.cs"
 "Assets/Scripts/Controllers/GameUIButtonController.cs"
 "Assets/Scripts/Controllers/LevelManager.cs"
 "Assets/Scripts/Controllers/SceneLoader.cs"
@@ -389,6 +390,7 @@
 "Assets/Scripts/Utils/MonoSingletonPersistent.cs"
 "Assets/Scripts/Utils/RemainingTiles.cs"
 "Assets/Scripts/Utils/ScoringSystem.cs"
+"Assets/Scripts/Utils/WordChecker.cs"
 -langversion:9.0
 
 /deterministic

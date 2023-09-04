@@ -1,3 +1,6 @@
+using System;
+using Data;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Controllers
@@ -12,9 +15,17 @@ namespace Controllers
         private void Awake()
         {
             instance = this;
+
+            LevelManager.OnLevelComplete += ShowLevelCompletePanel;
         }
 
-        public void ShowLevelCompletePanel()
+        private void OnDestroy()
+        {
+            LevelManager.OnLevelComplete -= ShowLevelCompletePanel;
+        }
+
+
+        public void ShowLevelCompletePanel(LevelData levelData)
         {
             nextButton.SetActive(false); //Delay Button Activation
 
