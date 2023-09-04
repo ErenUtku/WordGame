@@ -10,7 +10,7 @@ namespace Tile
     {
         private bool _stopTileClicking;
 
-        public static Action<TileController> TileMoved;
+        public static Action TileMoved;
         public static Action CheckWord;
         
         public static TileSelector Instance;
@@ -43,11 +43,12 @@ namespace Tile
 
                     if (tileController != null)
                     {
+                        
                         SlotController.instance.TakeLetter(tileController);
-
-                        TriggerTileMovementAction(tileController);
                         
                         tileController.TileInSlot = true;
+                        
+                        TriggerTileMovementAction();
                         
                         CheckWord?.Invoke();
                     }
@@ -55,9 +56,9 @@ namespace Tile
             }
         }
 
-        public void TriggerTileMovementAction(TileController tileController)
+        public void TriggerTileMovementAction()
         {
-            TileMoved?.Invoke(tileController);
+            TileMoved?.Invoke();
         }
 
         private void StopTileClicking(LevelData levelData)

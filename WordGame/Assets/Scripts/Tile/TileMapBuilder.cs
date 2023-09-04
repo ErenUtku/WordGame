@@ -18,7 +18,7 @@ namespace Tile
                 foreach (var tileData in levelData.tiles)
                 {
                     TileController newTileController = Instantiate(tileControllerPrefab, tilesParent);
-                    newTileController.Initialize(tileData);
+                    newTileController.Initialize(tileData,tilesParent);
                 }
             }
         }

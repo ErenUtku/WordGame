@@ -18,9 +18,13 @@ namespace Tile
         
         [SerializeField] private bool childrenExist;
 
+        private TileController _tileController;
+
         private void Awake()
         {
+            _tileController = GetComponentInParent<TileController>();
             TileSelector.TileMoved += CheckContainsChildren;
+            
         }
 
         public void SetPosition(float x, float y, float z)
@@ -30,7 +34,11 @@ namespace Tile
             _zPosition = z;
             
             this.gameObject.transform.localPosition = new Vector3(x,y,z);
-            _currentParent = this.transform.parent;
+        }
+
+        public void SetParent(Transform parent)
+        {
+            _currentParent = parent;
         }
         
         public void ReturnPreviousPosition()
@@ -47,7 +55,8 @@ namespace Tile
         
         public bool ChildrenExist()
         {
-            return _childrenList.Count > 0;
+            childrenExist =  _childrenList.Count > 0;
+            return childrenExist;
         } 
         
         public void BlockerActivation(bool value)
@@ -55,18 +64,19 @@ namespace Tile
             blockObject.SetActive(value);
         }
         
-        private void CheckContainsChildren(TileController tileController)
+        private void CheckContainsChildren()
         {
             if (!childrenExist)
                 return;
             
-            if (_currentParent.Cast<Transform>().Any(child => tileController.TileData.children.Any(childId => childId.ToString() == child.name)))
+            if (_currentParent.Cast<Transform>().Any(child => _tileController.TileData.children.Any(childId => childId.ToString() == child.name)))
             {
                 BlockerActivation(true);
-                tileController.TileBlocked = true;
+                _tileController.TileBlocked = true;
+                return;
             }
             
-            tileController.TileBlocked = false;
+            _tileController.TileBlocked = false;
             BlockerActivation(false);
         }
         

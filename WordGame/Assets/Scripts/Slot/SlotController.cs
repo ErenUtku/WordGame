@@ -84,10 +84,10 @@ namespace Slot
             _allTileControllers.Last().TileInSlot = false;
             
             _slotsTransform[lastItemIndex].GetComponent<WordSlot>().FillTheSlot(false);
-            
-            TileSelector.Instance.TriggerTileMovementAction(_allTileControllers.Last());
-            
+
             _allTileControllers.RemoveAt(lastItemIndex);
+            
+            TileSelector.Instance.TriggerTileMovementAction();
 
             if (_allTileControllers.Count <= 0)
             {
