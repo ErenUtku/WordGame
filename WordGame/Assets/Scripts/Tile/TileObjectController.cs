@@ -24,7 +24,11 @@ namespace Tile
         {
             _tileController = GetComponentInParent<TileController>();
             TileSelector.TileMoved += CheckContainsChildren;
-            
+        }
+
+        private void OnDestroy()
+        {
+            TileSelector.TileMoved -= CheckContainsChildren;
         }
 
         public void SetPosition(float x, float y, float z)

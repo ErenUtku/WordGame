@@ -22,10 +22,13 @@ namespace Controllers
             _dataManager = DataManager.Instance;
         }
 
-        public void SetLevelScore(List<string> claimedWords , int parentChildCount)
+        public int GetLevelScore(List<string> claimedWords , int parentChildCount)
         {
-            var totalScore = _scoringSystem.CalculateTotalScore(claimedWords, parentChildCount);
+            return _scoringSystem.CalculateTotalScore(claimedWords, parentChildCount);
+        }
 
+        public void SetLevelScore(int totalScore)
+        {
             _dataManager.HighScoreManager.SetHighScore(_dataManager.GetLevelIndex(), totalScore);
         }
     }

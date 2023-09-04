@@ -26,6 +26,9 @@ namespace Slot
         private string _formedWord;
         public bool validWordFound;
         
+        public int CurrentHighScore { get; set; }
+        public int PreviousHighScore { get; set; }
+        
         public static SlotController instance;
         private void Awake()
         {
@@ -181,10 +184,10 @@ namespace Slot
         
         private void HandleLevelCompletion()
         {
-            ScoreController.Instance.SetLevelScore(_claimedWords, unusedParent.transform.childCount);
-            
+            PreviousHighScore =DataManager.Instance.HighScoreManager.GetHighScore(DataManager.Instance.GetLevelIndex());
+            CurrentHighScore = ScoreController.Instance.GetLevelScore(_claimedWords, unusedParent.transform.childCount);
             LevelManager.Instance.LevelComplete();
-            
+            ScoreController.Instance.SetLevelScore(CurrentHighScore);
         }
 
     }
