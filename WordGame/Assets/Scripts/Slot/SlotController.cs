@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using Controllers;
 using Data;
 using Tile;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Debug = UnityEngine.Debug;
+using Utils;
 
 namespace Slot
 {
@@ -32,7 +31,6 @@ namespace Slot
         {
             instance = this;
             TileSelector.CheckWord += CheckWordInDictionary;
-            
         }
 
         private void OnDestroy()
@@ -95,7 +93,6 @@ namespace Slot
             
         }
         
-        
         public void CheckWordInDictionary()
         {
             formedWord = string.Join("", allTileControllers.Select(tile => tile.TileData.character));
@@ -107,12 +104,11 @@ namespace Slot
                 
                 validWordFound = true;
 
-                AcceptButton.instance.ButtonActivation(true);
-                Debug.Log("Valid word found: " + formedWord);
+                GameUIButtonController.instance.ButtonActivation(true,ButtonType.Accept);
                 return;
             }
 
-            AcceptButton.instance.ButtonActivation(false);
+            GameUIButtonController.instance.ButtonActivation(false,ButtonType.Accept);
             validWordFound = false;
         }
 
@@ -120,9 +116,6 @@ namespace Slot
         {
             if (!validWordFound) return;
 
-            Debug.Log("SCORE HERE");
-            
-            
             foreach (Transform child in usedParent)
             {
                 Destroy(child.gameObject);
@@ -138,7 +131,7 @@ namespace Slot
             
             claimedWords.Add(formedWord);
 
-            AcceptButton.instance.ButtonActivation(false);
+            GameUIButtonController.instance.ButtonActivation(false,ButtonType.Accept);
             
             
         }
@@ -169,20 +162,17 @@ namespace Slot
 
             RemainingTiles remainingTiles = new RemainingTiles(DataManager.Instance.GetLevelData(),allTiles, DataManager.Instance.Dictionary);
             var validWords = remainingTiles.FindWords();
-
             
-            if (validWords.Count <= 0)
-            {
-                var totalScore = scoringSystem.CalculateTotalScore(claimedWords,unusedParent.transform.childCount);
+            if (validWords.Count > 0) return;
+            
+            var totalScore = scoringSystem.CalculateTotalScore(claimedWords,unusedParent.transform.childCount);
 
-                _dataManager.HighScoreManager.SetHighScore(DataManager.Instance.GetLevelIndex(), totalScore);
+            _dataManager.HighScoreManager.SetHighScore(DataManager.Instance.GetLevelIndex(), totalScore);
                 
-                DataManager.Instance.SetLevel(DataManager.Instance.GetLevelIndex()+1);
+            DataManager.Instance.SetLevel(DataManager.Instance.GetLevelIndex()+1);
 
-                UIController.instance.ShowLevelCompletePanel();
+            UIController.instance.ShowLevelCompletePanel();
 
-            }
-            
         }
     }
 }

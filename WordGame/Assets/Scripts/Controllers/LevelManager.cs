@@ -28,9 +28,7 @@ namespace Controllers
         public static LevelManager Instance { get; private set; }
 
         #endregion
-
         
-
         #region PUBLIC METHODS
         
         public LevelData GetLevel()
