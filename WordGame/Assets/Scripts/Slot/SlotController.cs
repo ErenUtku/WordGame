@@ -19,7 +19,6 @@ namespace Slot
         private List<TileController> _allTileControllers;
         
         private DataManager _dataManager;
-        private ScoringSystem _scoringSystem;
         private WordChecker _wordChecker;
         
         private readonly List<string> _claimedWords = new List<string>();
@@ -42,7 +41,6 @@ namespace Slot
         {
             _allTileControllers = new List<TileController>();
             _slotsTransform = new List<Transform>();
-            _scoringSystem = new ScoringSystem();
             _dataManager = DataManager.Instance;
 
             _wordChecker = new WordChecker(_dataManager.Dictionary);
@@ -61,8 +59,13 @@ namespace Slot
             
                 if(wordSlot.IsFull()) continue;
             
+                GameUIButtonController.ButtonBehavior(true,ButtonType.Undo);
+                
                 wordSlot.FillTheSlot(true);
+                
                 _allTileControllers.Add(tileController);
+                
+                //TilePositioning
                 tileController.transform.SetParent(usedParent);
                 tileController.transform.position = slot.transform.position;
                 
@@ -74,8 +77,6 @@ namespace Slot
 
         public void UndoLetter()
         {
-            if (_allTileControllers.Count <= 0) return;
-            
             int lastItemIndex = _allTileControllers.Count - 1;
             
             _allTileControllers.Last().TileObjectController.ReturnPreviousPosition();
@@ -87,6 +88,11 @@ namespace Slot
             TileSelector.Instance.TriggerTileMovementAction(_allTileControllers.Last());
             
             _allTileControllers.RemoveAt(lastItemIndex);
+
+            if (_allTileControllers.Count <= 0)
+            {
+                GameUIButtonController.ButtonBehavior(false,ButtonType.Undo);
+            }
             
         }
         
@@ -109,7 +115,7 @@ namespace Slot
             
             _claimedWords.Add(_formedWord);
 
-            GameUIButtonController.instance.ButtonActivation(false,ButtonType.Accept);
+            GameUIButtonController.ButtonBehavior(false,ButtonType.Accept);
             
             
         }
@@ -121,12 +127,12 @@ namespace Slot
             if (_wordChecker.IsWordValid(_formedWord))
             {
                 validWordFound = true;
-                GameUIButtonController.instance.ButtonActivation(true, ButtonType.Accept);
+                GameUIButtonController.ButtonBehavior(true,ButtonType.Accept);
             }
             else
             {
                 validWordFound = false;
-                GameUIButtonController.instance.ButtonActivation(false, ButtonType.Accept);
+                GameUIButtonController.ButtonBehavior(false,ButtonType.Accept);
             }
         }
 

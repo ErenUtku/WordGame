@@ -1,4 +1,7 @@
+using System;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Controllers
@@ -6,38 +9,44 @@ namespace Controllers
     public class GameUIButtonController : MonoBehaviour
     {
         [SerializeField] private Button acceptButton;
-        [SerializeField] private Button reverseButton;
-        public static GameUIButtonController instance;
+        [SerializeField] private Button undoButton;
+
+        public static Action<bool, ButtonType> ButtonBehavior;
 
         private void Awake()
         {
-            instance = this;
+            ButtonBehavior += ButtonActivation;
+        }
+        
+        private void OnDestroy()
+        {
+            ButtonBehavior -= ButtonActivation;
         }
 
         private void Start()
         {
             //First Time
             ButtonActivation(false,ButtonType.Accept);
+            ButtonActivation(false,ButtonType.Undo);
         }
 
-        public void ButtonActivation(bool value,ButtonType buttonType)
+        private void ButtonActivation(bool value,ButtonType buttonType)
         {
             switch (buttonType)
             {
                 case ButtonType.Accept:
                     acceptButton.interactable = value;
                     break;
-                case ButtonType.Reverse:
-                    //TODO
+                case ButtonType.Undo:
+                    undoButton.interactable = value;
                     break;
             }
-        
         }
     }
 
     public enum ButtonType
     {
         Accept,
-        Reverse
+        Undo
     }
 }
