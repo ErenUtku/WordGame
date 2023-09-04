@@ -33,7 +33,7 @@ namespace Controllers
             
             var totalScore = DataManager.Instance.HighScoreManager.GetHighScore(_levelIndex);
 
-            if (DataManager.Instance.LevelIndex <= _levelIndex) return;
+            if (DataManager.Instance.LevelIndex -1 < _levelIndex) return;
             
             _levelButtonUI.UnlockLevel();
                 

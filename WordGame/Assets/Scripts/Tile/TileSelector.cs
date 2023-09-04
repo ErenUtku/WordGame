@@ -43,14 +43,13 @@ namespace Tile
 
                     if (tileController != null)
                     {
-                        
                         SlotController.instance.TakeLetter(tileController);
                         
                         tileController.TileInSlot = true;
                         
                         TriggerTileMovementAction();
-                        
-                        CheckWord?.Invoke();
+
+                        TriggerWordCheckerAction();
                     }
                 }
             }
@@ -59,6 +58,11 @@ namespace Tile
         public void TriggerTileMovementAction()
         {
             TileMoved?.Invoke();
+        }
+
+        public void TriggerWordCheckerAction()
+        {
+            CheckWord?.Invoke();
         }
 
         private void StopTileClicking(LevelData levelData)

@@ -52,7 +52,7 @@ namespace Data
     
         private void SetLevelIndex(int value)
         {
-            _playerDataState.levelIndex = value;
+            _playerDataState.levelIndex = value ;
             SaveManager.SaveData(_playerDataState,"SavePlayerDataState");
             OnDataChanged?.Invoke(PlayerDataType.LevelIndex);
         }

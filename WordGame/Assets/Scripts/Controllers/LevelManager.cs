@@ -49,7 +49,7 @@ namespace Controllers
         
         public void LevelComplete()
         {
-            DataManager.Instance.SetLevel(DataManager.Instance.GetLevelIndex() + 1);
+            DataManager.Instance.LevelIndex = ((DataManager.Instance.GetLevelIndex()+1) + 1); //+1 for index getting -1
             OnLevelComplete?.Invoke(_currentLevelData);
         }
         

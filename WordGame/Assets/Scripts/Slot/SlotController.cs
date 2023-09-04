@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Controllers;
@@ -72,7 +73,6 @@ namespace Slot
                 break;
             }
 
-            CheckRemainingWord();
         }
 
         public void UndoLetter()
@@ -88,6 +88,8 @@ namespace Slot
             _allTileControllers.RemoveAt(lastItemIndex);
             
             TileSelector.Instance.TriggerTileMovementAction();
+
+            TileSelector.Instance.TriggerWordCheckerAction();
 
             if (_allTileControllers.Count <= 0)
             {
@@ -116,8 +118,8 @@ namespace Slot
             _claimedWords.Add(_formedWord);
 
             GameUIButtonController.ButtonBehavior(false,ButtonType.Accept);
-            
-            
+
+            CheckRemainingWord();
         }
         
         private void CheckWordInDictionary()
@@ -138,11 +140,13 @@ namespace Slot
 
         private void CheckRemainingWord()
         {
-            List<Data.TileData> allTiles = GetAllTiles();
+            List<TileData> allTilesData = new List<TileData>();
 
-            allTiles.OrderBy(tile => tile.children.Count).ToList();
+            GetChildOfParent(allTilesData, WordParentPile.Unused);
 
-            RemainingTiles remainingTiles = new RemainingTiles(DataManager.Instance.GetLevelData(), allTiles, DataManager.Instance.Dictionary);
+            allTilesData = allTilesData.OrderBy(tileData => tileData.children.Count).ToList();
+
+            RemainingTiles remainingTiles = new RemainingTiles(DataManager.Instance.GetLevelData(), allTilesData, DataManager.Instance.Dictionary);
             var validWords = remainingTiles.FindWords();
 
             if (validWords.Count == 0)
@@ -151,29 +155,28 @@ namespace Slot
             }
         }
 
-        private List<Data.TileData> GetAllTiles()
+        public void GetChildOfParent(List<TileData> childList, WordParentPile parentType)
         {
-            List<Data.TileData> allTiles = new List<Data.TileData>();
-    
-            foreach (Transform child in unusedParent)
+            Transform parentTransform = null;
+
+            switch (parentType)
+            {
+                case WordParentPile.Used:
+                    parentTransform = usedParent;
+                    break;
+                case WordParentPile.Unused:
+                    parentTransform = unusedParent;
+                    break;
+            }
+
+            foreach (Transform child in parentTransform)
             {
                 TileController tileController = child.GetComponent<TileController>();
                 if (tileController != null)
                 {
-                    allTiles.Add(tileController.TileData);
+                    childList.Add(tileController.TileData);
                 }
             }
-
-            foreach (Transform child in usedParent)
-            {
-                TileController tileController = child.GetComponent<TileController>();
-                if (tileController != null)
-                {
-                    allTiles.Add(tileController.TileData);
-                }
-            }
-
-            return allTiles;
         }
         
         private void HandleLevelCompletion()
@@ -185,4 +188,10 @@ namespace Slot
         }
 
     }
+}
+
+public enum WordParentPile
+{
+    Used,
+    Unused
 }
