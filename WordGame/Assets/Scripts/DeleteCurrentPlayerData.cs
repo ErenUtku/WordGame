@@ -11,7 +11,11 @@ namespace Controllers.Data
             if (SaveManager.SaveExist("SavePlayerDataState"))
             {
                 // Delete the file
+                
+                //HighScores
                 PlayerPrefs.DeleteAll();
+                
+                //LevelData
                 File.Delete(Application.persistentDataPath+"/save/"+ "SavePlayerDataState" + ".WordGamesSave");
                 Debug.Log("GameData has been deleted.");
 

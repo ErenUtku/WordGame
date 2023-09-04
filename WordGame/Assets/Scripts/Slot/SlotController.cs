@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Data;
 using Tile;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -166,6 +167,19 @@ namespace Slot
             var validWords = remainingTiles.FindWords();
             Debug.Log(validWords);
 
+            
+            if (validWords.Count <= 0)
+            {
+                var totalScore = scoringSystem.CalculateTotalScore(claimedWords,unusedParent.transform.childCount);
+
+                _dataManager.SetHighScore(DataManager.Instance.GetLevelIndex(), totalScore);
+                
+                DataManager.Instance.SetLevel(DataManager.Instance.GetLevelIndex()+1);
+
+                UIController.instance.ShowLevelCompletePanel();
+
+            }
+            
         }
     }
 }

@@ -11,17 +11,13 @@ public class DataManager : MonoSingletonPersistent<DataManager>
     public Dictionary<string, bool> Dictionary { get; } = new Dictionary<string, bool>(); 
     private PlayerDataState _playerDataState;
     private LevelData[] _levels;
-    private Dictionary<int, int> highScores = new Dictionary<int, int>();
+    private Dictionary<int, int> _highScores = new Dictionary<int, int>();
     
     private LevelData _currentLevelData;
     private int _currentLevelIndex;
     private int _totalLevelIndex;
     
     public static event Action<PlayerDataType> OnDataChanged;
-    void Awake()
-    {
-        
-    }
     void Start()
     {
         //Dictionary
@@ -150,7 +146,7 @@ public class DataManager : MonoSingletonPersistent<DataManager>
     // Save high scores to player preferences or a file
     private void SaveHighScores()
     {
-        foreach (var kvp in highScores)
+        foreach (var kvp in _highScores)
         {
             PlayerPrefs.SetInt("HighScoreLevel" + kvp.Key, kvp.Value);
         }
@@ -160,30 +156,31 @@ public class DataManager : MonoSingletonPersistent<DataManager>
     // Load high scores from player preferences or a file
     private void LoadHighScores()
     {
-        highScores.Clear();
+        _highScores = new Dictionary<int, int>();
 
-        foreach (var kvp in highScores)
+        for (int level = 0; level < _levels.Length; level++) 
         {
-            int score = PlayerPrefs.GetInt("HighScoreLevel" + kvp.Key);
-            highScores[kvp.Key] = score;
+            int score = PlayerPrefs.GetInt("HighScoreLevel" + level, 0); 
+            _highScores[level] = score;
         }
     }
+
 
     // Set the high score for a specific level
     public void SetHighScore(int level, int score)
     {
-        if (highScores.ContainsKey(level))
+        if (_highScores.ContainsKey(level))
         {
             // Check if the new score is higher than the existing high score
-            if (score > highScores[level])
+            if (score > _highScores[level])
             {
-                highScores[level] = score;
+                _highScores[level] = score;
                 SaveHighScores(); // Save the updated high score
             }
         }
         else
         {
-            highScores[level] = score;
+            _highScores[level] = score;
             SaveHighScores(); // Save the new high score
         }
     }
@@ -191,9 +188,9 @@ public class DataManager : MonoSingletonPersistent<DataManager>
     // Get the high score for a specific level
     public int GetHighScore(int level)
     {
-        if (highScores.ContainsKey(level))
+        if (_highScores.ContainsKey(level))
         {
-            return highScores[level];
+            return _highScores[level];
         }
         return 0; // No high score found for this level
     }

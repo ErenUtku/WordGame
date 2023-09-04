@@ -18,7 +18,7 @@ public class ScoringSystem
     {
         int score = 0;
 
-        foreach (char letter in word.ToUpper()) // Convert the word to uppercase for consistency.
+        foreach (char letter in word.ToUpper()) // Convert the word to uppercase for consistency
         {
             if (letterValues.ContainsKey(letter))
             {
@@ -29,7 +29,7 @@ public class ScoringSystem
         return score;
     }
 
-    public int CalculateTotalScore(string[] words, int unusedLetterCount)
+    public int CalculateTotalScore(List<string> words, int unusedLetterCount)
     {
         int totalScore = 0;
 
@@ -39,7 +39,7 @@ public class ScoringSystem
             totalScore += wordScore * (10 * word.Length);
         }
 
-        // Subtract 100 points for each unused letter at the end of the level.
+        // Subtract 100 points for each unused letter at the end of the level
         totalScore -= unusedLetterCount * 100;
 
         return totalScore;

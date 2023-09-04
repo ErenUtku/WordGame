@@ -372,6 +372,7 @@
 "Assets/Scripts/DataManager.cs"
 "Assets/Scripts/DeleteCurrentPlayerData.cs"
 "Assets/Scripts/LevelButton.cs"
+"Assets/Scripts/LevelManager.cs"
 "Assets/Scripts/PlayerDataState.cs"
 "Assets/Scripts/RemainingTiles.cs"
 "Assets/Scripts/SaveManager.cs"

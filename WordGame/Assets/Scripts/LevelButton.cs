@@ -1,9 +1,16 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelButton : MonoBehaviour
 {
-    public int levelIndex;
+    [Header("Level Value")]
+    [SerializeField] private int levelIndex;
+
+    [Space] 
+    [SerializeField] private GameObject highScoreObject;
+    [SerializeField] private TextMeshProUGUI highScoreValueText;
 
     private Button _button;
     
@@ -12,6 +19,16 @@ public class LevelButton : MonoBehaviour
     {
         _button = GetComponent<Button>();
         _button.onClick.AddListener(SelectLevel);
+    }
+
+    private void Start()
+    {
+        var totalScore = DataManager.Instance.GetHighScore(levelIndex);
+
+        if (totalScore <= 0) return;
+        
+        highScoreObject.SetActive(true);
+        highScoreValueText.text = totalScore.ToString();
     }
 
     private void SelectLevel()
